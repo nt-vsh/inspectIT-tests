@@ -65,7 +65,7 @@ public class Main {
 		String properties = "";
 		Set<Object> keySet = System.getProperties().keySet();
 		for (Object key : keySet) {
-			properties += " " + System.getProperty((String) key);
+			properties += " -D" + key + "=" + System.getProperty((String) key);
 		}
 
 		String command = "java -Xbootclasspath/p:" + agentLocation + "/build/release/inspectit-agent.jar";
