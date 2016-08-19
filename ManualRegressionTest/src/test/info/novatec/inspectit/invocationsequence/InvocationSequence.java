@@ -12,16 +12,15 @@ import test.info.novatec.inspectit.sql.SQLFeatures;
 import test.info.novatec.inspectit.sql.tools.ConnectionFactory;
 
 /**
- * First instance of invocation sequence. Mainclass for calling other,
- * instrumented classes
- * 
+ * First instance of invocation sequence. Main class for calling other, instrumented classes
+ *
  * @author Alfred Kraus
- * 
+ *
  */
 public class InvocationSequence {
 
 	/**
-	 * simple invocationsequence
+	 * simple invocation sequence
 	 */
 	@Test
 	public void testSimpleInvocationSequence() {
@@ -50,9 +49,8 @@ public class InvocationSequence {
 	}
 
 	/**
-	 * calling the same sql multiple times in different stages of the invocation
-	 * sequence
-	 * 
+	 * calling the same sql statements multiple times in different stages of the invocation sequence
+	 *
 	 * @throws SQLException
 	 */
 	@Test
@@ -69,14 +67,14 @@ public class InvocationSequence {
 
 	/**
 	 * Pool with tests for sensors without an invocation sequence
-	 * 
+	 *
 	 * @throws SQLException
 	 * @throws ServletException
 	 * @throws IOException
 	 */
 	@Test
 	public void noInvocationSequenceSensortests() throws SQLException,
-			ServletException, IOException {
+	ServletException, IOException {
 		System.out.println("Starting tests WITHOUT invocation sequence");
 		System.out.println();
 
@@ -92,20 +90,19 @@ public class InvocationSequence {
 
 	/**
 	 * Calls a pool with tests for sensors within an invocation sequence
-	 * 
+	 *
 	 * @throws SQLException
 	 * @throws ServletException
 	 * @throws IOException
 	 */
 	@Test
-	public void invocationSequenceSensortests() throws SQLException,
-			ServletException, IOException {
+	public void invocationSequenceSensortests() throws SQLException, ServletException, IOException {
 		InvocationSequenceLevel2 level2 = new InvocationSequenceLevel2();
 		level2.invocationSequenceSensortestsLevel2();
 	}
 
 	/**
-	 * Test of the MinDuration-Feature
+	 * Test of the MinDuration feature
 	 */
 	@Test
 	public void testMinDurationInvocationSequence() {
@@ -139,7 +136,7 @@ public class InvocationSequence {
 
 	/**
 	 * Using all tests included in SQLFeatures
-	 * 
+	 *
 	 * @throws SQLException
 	 */
 	private void databaseSensortest() throws SQLException {
@@ -154,7 +151,7 @@ public class InvocationSequence {
 	}
 
 	/**
-	 * Testing the exceptionsensor by throwing an empty exception
+	 * Testing the exception sensor by throwing an empty exception
 	 */
 	private void exceptionSensortest() {
 		System.out.println("Starting Exceptionsensor - Test...");
@@ -163,23 +160,23 @@ public class InvocationSequence {
 		try {
 			throw new FakeException();
 		} catch (FakeException e) {
-			System.out.println("Exception catched...");
+			System.out.println("Exception caught...");
 		}
 
 		System.out.println("Exceptionsensor - Test - Finished");
 	}
 
 	private void plattformSensortest() {
-		System.out.println("Starting Plattformsensor - Test...");
+		System.out.println("Starting Platformsensor - Test...");
 
 		// TODO
 
-		System.out.println("Plattformsensor - Test - Finished");
+		System.out.println("Platformsensor - Test - Finished");
 	}
 
 	/**
 	 * Using all tests included in HTTPFeatures
-	 * 
+	 *
 	 * @throws ServletException
 	 * @throws IOException
 	 */
@@ -199,7 +196,7 @@ public class InvocationSequence {
 		httpFeatures.httpsGetParameters();
 		httpFeatures.httpsPostParameters();
 
-		System.out.println("HTTPsensor - Test - Finished");
+		System.out.println("HTTPSensor - Test - Finished");
 	}
 
 }

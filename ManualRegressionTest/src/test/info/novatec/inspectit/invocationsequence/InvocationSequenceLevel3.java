@@ -11,7 +11,7 @@ import test.info.novatec.inspectit.sql.tools.ConnectionFactory;
 
 /**
  * Subclass of InvocationSequence calling another Subclass
- * 
+ *
  * @author Alfred Kraus
  */
 public class InvocationSequenceLevel3 {
@@ -33,7 +33,7 @@ public class InvocationSequenceLevel3 {
 
 	/**
 	 * Pool with tests for sensors with an invocation sequence
-	 * 
+	 *
 	 * @throws SQLException
 	 * @throws ServletException
 	 * @throws IOException
@@ -67,7 +67,7 @@ public class InvocationSequenceLevel3 {
 		try {
 			throw new FakeException();
 		} catch (FakeException e) {
-			System.out.println("Exception catched...");
+			System.out.println("Exception caught...");
 		}
 	}
 

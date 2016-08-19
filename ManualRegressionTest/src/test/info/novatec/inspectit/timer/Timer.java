@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 
 /**
  * Providing a timer. Charting is enabled/disabled in Timer.config
- * 
+ *
  * @author Alfred Krauss
  *
  */
@@ -13,7 +13,7 @@ public class Timer {
 
 	int counter = 1;
 	Timer timer;
-	
+
 	@BeforeTest
 	public void init() {
 		timer = new Timer();
@@ -24,10 +24,24 @@ public class Timer {
 		fourTimesSleep();
 		counter++;
 	}
-	
+
 	@Test
 	public void timerWithCharting() {
 		timer.timerWithoutCharting();
+		counter++;
+	}
+
+	public void shortTimerWithoutCharting() {
+		try {
+			Thread.sleep(50);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		counter++;
+	}
+
+	public void shortTimerWithCharting() {
+		timer.shortTimerWithoutCharting();
 		counter++;
 	}
 

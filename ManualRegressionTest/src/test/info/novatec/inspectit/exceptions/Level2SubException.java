@@ -2,7 +2,7 @@ package test.info.novatec.inspectit.exceptions;
 
 /**
  * Last instance of Exceptions. Providing a String.
- * 
+ *
  * @author Alfred Kraus
  */
 public class Level2SubException extends Level1SubException {
@@ -14,6 +14,6 @@ public class Level2SubException extends Level1SubException {
 	}
 
 	public void catchAll() {
-		System.out.println("Catched Exception on Level 2");
+		System.out.println("Caught Exception on Level 2");
 	}
 }

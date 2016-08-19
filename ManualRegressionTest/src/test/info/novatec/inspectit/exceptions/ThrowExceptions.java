@@ -7,9 +7,9 @@ import org.testng.annotations.Test;
 /**
  * Throwing and catching exceptions with and without cause. Thrown exceptions
  * can be seen in inspectIT
- * 
+ *
  * @author Alfred Kraus
- * 
+ *
  */
 public class ThrowExceptions {
 
@@ -43,18 +43,15 @@ public class ThrowExceptions {
 			System.out.println("Throwing MainException...");
 			throw new MainException("MainException thrown");
 		} catch (MainException mainException) {
-			System.out
-					.println("Catched MainException. Throw Level1SubExcetpion...");
+			System.out.println("Caught MainException. Throw Level1SubExcetpion...");
 			try {
 				throw new Level1SubException("Level1SubException thrown");
 			} catch (Level1SubException level1SubException) {
-				System.out
-						.println("Catched Level1SubException. Throw Level2SubException...");
+				System.out.println("Caught Level1SubException. Throw Level2SubException...");
 				try {
 					throw new Level2SubException("Level2SubException thrown");
 				} catch (Level2SubException level2SubException) {
-					System.out
-							.println("Catched Level2SubException. Calling \"Catchmethod\" of Level2Subexception...");
+					System.out.println("Caught Level2SubException. Calling \"Catchmethod\" of Level2Subexception...");
 					level2SubException.catchAll();
 				}
 			}

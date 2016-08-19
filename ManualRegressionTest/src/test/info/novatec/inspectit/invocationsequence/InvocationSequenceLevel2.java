@@ -7,19 +7,19 @@ import javax.servlet.ServletException;
 
 /**
  * Subclass of InvocationSequence calling another Subclass
- * 
+ *
  * @author Alfred Kraus
  */
-public class InvocationSequenceLevel2{
+public class InvocationSequenceLevel2 {
 	private boolean testvalue = false;
-	
-	public boolean getLevel3TestValue(){
+
+	public boolean getLevel3TestValue() {
 		InvocationSequenceLevel3 level3 = new InvocationSequenceLevel3();
 		testvalue = level3.returnTestValue();
 		return testvalue;
 	}
-	
-	public boolean getLevel3MinDurationTestValue(){
+
+	public boolean getLevel3MinDurationTestValue() {
 		InvocationSequenceLevel3 level3 = new InvocationSequenceLevel3();
 		testvalue = level3.returnTestValueAfterMinDUration();
 		try {
@@ -29,8 +29,8 @@ public class InvocationSequenceLevel2{
 		}
 		return testvalue;
 	}
-	
-	public void invocationSequenceSensortestsLevel2() throws SQLException, ServletException, IOException{
+
+	public void invocationSequenceSensortestsLevel2() throws SQLException, ServletException, IOException {
 		InvocationSequenceLevel3 level3 = new InvocationSequenceLevel3();
 		level3.invocationSequenceSensortestsLevel3();
 	}
@@ -48,5 +48,5 @@ public class InvocationSequenceLevel2{
 		level3.testSteppingFeatureSQL();
 		level3.testSteppingFeatureSQL();
 	}
-	
+
 }
