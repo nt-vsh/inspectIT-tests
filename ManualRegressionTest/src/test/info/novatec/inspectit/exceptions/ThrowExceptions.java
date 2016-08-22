@@ -58,4 +58,19 @@ public class ThrowExceptions {
 		}
 	}
 
+	public void passingExceptionsNoLogging() throws MainException {
+		try {
+			throw new MainException("MainException thrown");
+		} catch (MainException mainException) {
+			try {
+				throw new Level1SubException("Level1SubException thrown");
+			} catch (Level1SubException level1SubException) {
+				try {
+					throw new Level2SubException("Level2SubException thrown");
+				} catch (Level2SubException level2SubException) {
+					// do nothing
+				}
+			}
+		}
+	}
 }

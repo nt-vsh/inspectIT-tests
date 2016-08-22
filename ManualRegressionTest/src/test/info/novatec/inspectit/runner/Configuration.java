@@ -1,5 +1,23 @@
 package test.info.novatec.inspectit.runner;
 
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyBindParameters;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyCauseException;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyHTTPGet;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyHTTPS;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyNumberOfConcurrentThreads;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyNumberOfFirstLevelChildren;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyPassExceptions;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyPreparedStatement;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keySimpleInvocationSequence;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyThreadExecutionTime;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyThreadPause;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyTimerCharting;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyWeightException;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyWeightHTTP;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyWeightLogging;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyWeightSQL;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyWeightTimer;
+
 import java.util.Set;
 
 /**
@@ -25,53 +43,55 @@ public class Configuration {
 	private static int weightLogging;
 	private static int weightSQL;
 	private static int weightTimers;
+	private static int sumOfWeights;
 
 	public static void getWeights() {
-		int correctWeights = 0;
+		sumOfWeights = 0;
 		Set<Object> keySet = System.getProperties().keySet();
-		boolean hasAny = keySet.contains("weight.exception") || keySet.contains("weight.http") || keySet.contains("weight.logging") || keySet.contains("weight.sql") || keySet.contains("weight.timer");
+		boolean hasAny = keySet.contains(keyWeightException) || keySet.contains(keyWeightHTTP) || keySet.contains(keyWeightLogging) || keySet.contains(keyWeightSQL) || keySet.contains(keyWeightTimer);
 		if (hasAny) {
 			try {
-				weightException = Integer.parseInt(System.getProperty("weight.exception"));
-				correctWeights++;
+				weightException = Integer.parseInt(System.getProperty(keyWeightException));
+				sumOfWeights += weightException;
 			} catch (NumberFormatException e) {
 			}
 			try {
-				weightHTTP = Integer.parseInt(System.getProperty("weight.http"));
-				correctWeights++;
+				weightHTTP = Integer.parseInt(System.getProperty(keyWeightHTTP));
+				sumOfWeights += weightHTTP;
 			} catch (NumberFormatException e) {
 			}
 			try {
-				weightLogging = Integer.parseInt(System.getProperty("weight.logging"));
-				correctWeights++;
+				weightLogging = Integer.parseInt(System.getProperty(keyWeightLogging));
+				sumOfWeights += weightLogging;
 			} catch (NumberFormatException e) {
 			}
 			try {
-				weightSQL = Integer.parseInt(System.getProperty("weight.sql"));
-				correctWeights++;
+				weightSQL = Integer.parseInt(System.getProperty(keyWeightSQL));
+				sumOfWeights += weightSQL;
 			} catch (NumberFormatException e) {
 			}
 			try {
-				weightTimers = Integer.parseInt(System.getProperty("weight.timer"));
-				correctWeights++;
+				weightTimers = Integer.parseInt(System.getProperty(keyWeightTimer));
+				sumOfWeights += weightTimers;
 			} catch (NumberFormatException e) {
 			}
 		}
 
-		if (correctWeights == 0) {
+		if (sumOfWeights == 0) {
 			// default values
 			weightException = defaultWeightException;
 			weightHTTP = defaultWeightHTTP;
 			weightLogging = defaultWeightLogging;
 			weightSQL = defaultWeightSQL;
 			weightTimers = defaultWeightTimers;
+			sumOfWeights = weightException + weightHTTP + weightLogging + weightSQL + weightTimers;
 		}
 	}
 
 	// Thread configuration
 	public static int numberOfConcurrentThreads() {
 		try {
-			return Integer.parseInt(System.getProperty("thread.concurrent"));
+			return Integer.parseInt(System.getProperty(keyNumberOfConcurrentThreads));
 		} catch (NumberFormatException e) {
 			return defaultNumberOfConcurrentThreads;
 		}
@@ -79,7 +99,7 @@ public class Configuration {
 
 	public static int threadExecutionTime() {
 		try {
-			return Integer.parseInt(System.getProperty("thread.time.execution"));
+			return Integer.parseInt(System.getProperty(keyThreadExecutionTime));
 		} catch (NumberFormatException e) {
 			return defaultThreadExecutionTime;
 		}
@@ -87,7 +107,7 @@ public class Configuration {
 
 	public static int threadPause() {
 		try {
-			return Integer.parseInt(System.getProperty("thread.time.pause"));
+			return Integer.parseInt(System.getProperty(keyThreadPause));
 		} catch (NumberFormatException e) {
 			return defaultThreadPause;
 		}
@@ -95,7 +115,11 @@ public class Configuration {
 
 	// Runner configuration
 	public static int numberOfInvocationChildren() {
-		return defaultNumberOfFirstLevelChildren;
+		try {
+			return Integer.parseInt(System.getProperty(keyNumberOfFirstLevelChildren));
+		} catch (NumberFormatException e) {
+			return defaultNumberOfFirstLevelChildren;
+		}
 	}
 
 	public static int weightException() {
@@ -118,40 +142,44 @@ public class Configuration {
 		return weightTimers;
 	}
 
+	public static int sumOfWeights() {
+		return sumOfWeights;
+	}
+
 	// Exception
 	public static boolean causeException() {
-		return "true".equals(System.getProperty("exception.cause"));
+		return "true".equals(System.getProperty(keyCauseException));
 	}
 
 	public static boolean passExceptions() {
-		return "true".equals(System.getProperty("exception.pass"));
+		return "true".equals(System.getProperty(keyPassExceptions));
 	}
 
 	// HTTP
 	public static boolean getRequest() {
-		return "true".equals(System.getProperty("http.get"));
+		return "true".equals(System.getProperty(keyHTTPGet));
 	}
 
 	public static boolean https() {
-		return "true".equals(System.getProperty("http.https"));
+		return "true".equals(System.getProperty(keyHTTPS));
 	}
 
 	// Invocation sequence
 	public static boolean simple() {
-		return "true".equals(System.getProperty("isequence.simple"));
+		return "true".equals(System.getProperty(keySimpleInvocationSequence));
 	}
 
 	// SQL
 	public static boolean bindParameters() {
-		return "true".equals(System.getProperty("sql.bindParameters"));
+		return "true".equals(System.getProperty(keyBindParameters));
 	}
 
 	public static boolean preparedStatement() {
-		return "true".equals(System.getProperty("sql.preparedStmt"));
+		return "true".equals(System.getProperty(keyPreparedStatement));
 	}
 
 	// Timer
 	public static boolean withCharting() {
-		return "true".equals(System.getProperty("timer.charting"));
+		return "true".equals(System.getProperty(keyTimerCharting));
 	}
 }

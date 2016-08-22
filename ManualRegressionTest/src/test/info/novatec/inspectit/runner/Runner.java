@@ -37,7 +37,7 @@ public class Runner {
 		weightSQL = Configuration.weightSQL();
 		weightTimers = Configuration.weightTimers();
 
-		sumOfWeights = weightException + weightHTTP + weightLogging + weightSQL + weightTimers;
+		sumOfWeights = Configuration.sumOfWeights();
 	}
 
 	public void execute() {

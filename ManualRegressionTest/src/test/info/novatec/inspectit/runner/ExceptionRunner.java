@@ -25,7 +25,7 @@ public class ExceptionRunner {
 	public void run() {
 		try {
 			if (passExceptions) {
-				throwExceptions.passingExceptions();
+				throwExceptions.passingExceptionsNoLogging();
 			} else if (causeException) {
 				throwExceptions.throwCauseException();
 			} else {
