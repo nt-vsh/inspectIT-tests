@@ -11,6 +11,7 @@ public class ConfigurationKeys {
 	public static final String keyAgentLocation = prefix + "agent.location";
 	public static final String keyLoggingConfigurationLocation = prefix + "logging.configuration.location";
 	public static final String keyRepositoryLocation = prefix + "repository.location";
+	public static final String keyResultsLocation = prefix + "results.location";
 	public static final String keyDifferentNameForAgents = prefix + "agent.name.different";
 	public static final String keySameNameForAgents = prefix + "agent.name.same";
 
@@ -38,4 +39,6 @@ public class ConfigurationKeys {
 	public static final String keyPreparedStatement = prefix + "sql.preparedStmt";
 
 	public static final String keyTimerCharting = prefix + "timer.charting";
+
+	public static final String keyFileNameResults = prefix + "results.file";
 }

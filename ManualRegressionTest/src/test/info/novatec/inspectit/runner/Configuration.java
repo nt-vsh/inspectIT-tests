@@ -2,6 +2,7 @@ package test.info.novatec.inspectit.runner;
 
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyBindParameters;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyCauseException;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyFileNameResults;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyHTTPGet;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyHTTPS;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyNumberOfConcurrentThreads;
@@ -36,6 +37,8 @@ public class Configuration {
 	private static final int defaultWeightLogging = 1;
 	private static final int defaultWeightSQL = 2;
 	private static final int defaultWeightTimers = 7;
+
+	private static final String defaultFileNameResults = "results/results.txt";
 
 
 	private static int weightException;
@@ -86,6 +89,10 @@ public class Configuration {
 			weightTimers = defaultWeightTimers;
 			sumOfWeights = weightException + weightHTTP + weightLogging + weightSQL + weightTimers;
 		}
+	}
+
+	public static String fileNameResults() {
+		return System.getProperty(keyFileNameResults, defaultFileNameResults);
 	}
 
 	// Thread configuration

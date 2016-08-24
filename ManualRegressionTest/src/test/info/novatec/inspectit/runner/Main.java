@@ -3,10 +3,12 @@ package test.info.novatec.inspectit.runner;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyAgentLocation;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyCauseException;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyDifferentNameForAgents;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyFileNameResults;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyHTTPS;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyLoggingConfigurationLocation;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyNumberOfAgents;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyRepositoryLocation;
+import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyResultsLocation;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keySameNameForAgents;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyWeightException;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyWeightHTTP;
@@ -24,8 +26,6 @@ import java.util.Set;
  */
 public class Main {
 
-	private static final String fileNameJAR = "runners.jar";
-
 	private static final String defaultAgentName = "OneAgent";
 	private static boolean allAgentsSameName;
 	private static boolean allAgentsDifferentName;
@@ -33,14 +33,18 @@ public class Main {
 	private static final int defaultNumberOfAgents = 5;
 	private static int numberOfAgents;
 	private static ArrayList<Process> processes;
+	private static ArrayList<String> filesResults;
 
 	private static String loggingConfigurationLocation;
 	private static String repositoryLocation;
 	private static String agentLocation;
+	private static String resultsLocation;
 
 	private static final String defaultAgentLocation = "inspectit-agent.jar";
+	private static final String defaultJARLocation = "runners.jar";
 	private static final String defaultLoggingConfigurationLocation = "logging-config.xml";
 	private static final String defaultRepositoryLocation = "localhost:9070";
+	private static final String defaultResultsLocation = "results/";
 	private static final String defaultOptions = "-D" + keyCauseException + "=true -D" + keyHTTPS + "=true -D" + keyWeightHTTP + "=6 -D" + keyWeightException + "=2";
 
 	public static void main(String[] args) {
@@ -52,8 +56,10 @@ public class Main {
 		loggingConfigurationLocation = System.getProperty(keyLoggingConfigurationLocation, defaultLoggingConfigurationLocation);
 		repositoryLocation = System.getProperty(keyRepositoryLocation, defaultRepositoryLocation);
 		agentLocation = System.getProperty(keyAgentLocation, defaultAgentLocation);
+		resultsLocation = System.getProperty(keyResultsLocation, defaultResultsLocation);
 
 		processes = new ArrayList<>();
+		filesResults = new ArrayList<>();
 
 		// if no option is provided the standard method is mixed
 		allAgentsSameName = "true".equals(System.getProperty(keySameNameForAgents));
@@ -69,9 +75,12 @@ public class Main {
 				} else {
 					agentName = "Agent" + (int) (10 * Math.random());
 				}
-				Process process = runAgent(agentName, defaultOptions);
+				String fileNameResults = resultsLocation + System.currentTimeMillis() + "-" + (int) (1000 * Math.random()) + ".txt";
+				Process process = runAgent(agentName, fileNameResults);
 				processes.add(process);
+				filesResults.add(fileNameResults);
 			}
+
 			for (int i = 0; i < numberOfAgents; i++) {
 				final Process process = processes.get(i);
 				Thread errorReader = new Thread(new Runnable() {
@@ -127,7 +136,7 @@ public class Main {
 		}
 	}
 
-	private static Process runAgent(String agentName, String options) throws IOException {
+	private static Process runAgent(String agentName, String fileNameResults) throws IOException {
 		String properties = "";
 		Set<Object> keySet = System.getProperties().keySet();
 		for (Object key : keySet) {
@@ -142,9 +151,10 @@ public class Main {
 		command += " -Dinspectit.repository=" + repositoryLocation;
 		command += " -Dinspectit.agent.name=" + agentName;
 		command += " -Dinspectit.logging.config=" + loggingConfigurationLocation;
-		command += " " + options;
+		command += " " + defaultOptions;
 		command += properties;
-		command += " -jar " + fileNameJAR;
+		command += " -D" + keyFileNameResults + "=" + fileNameResults;
+		command += " -jar " + defaultJARLocation;
 
 		Process process = Runtime.getRuntime().exec(command);
 		return process;

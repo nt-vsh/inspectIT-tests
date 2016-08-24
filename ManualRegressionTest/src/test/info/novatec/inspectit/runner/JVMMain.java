@@ -1,5 +1,7 @@
 package test.info.novatec.inspectit.runner;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,8 @@ public class JVMMain {
 
 	private static List<Thread> threads;
 
+	private static String fileNameResults;
+
 	public static void main(String[] args) {
 		threads = new ArrayList<>();
 
@@ -21,6 +25,7 @@ public class JVMMain {
 		threadExecutionTime = Configuration.threadExecutionTime();
 		threadPause = Configuration.threadPause();
 		Configuration.getWeights();
+		fileNameResults = Configuration.fileNameResults();
 
 		for (int i = 0; i < numberOfConcurrentThreads; i++) {
 			Thread thread = new Thread() {
@@ -49,6 +54,19 @@ public class JVMMain {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+		}
+		writeResults();
+	}
+
+	private static void writeResults() {
+		try {
+			File file = new File(fileNameResults);
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
