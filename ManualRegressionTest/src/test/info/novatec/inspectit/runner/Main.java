@@ -12,7 +12,9 @@ import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyWeightExce
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyWeightHTTP;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.prefix;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -70,7 +72,57 @@ public class Main {
 				Process process = runAgent(agentName, defaultOptions);
 				processes.add(process);
 			}
+			for (int i = 0; i < numberOfAgents; i++) {
+				final Process process = processes.get(i);
+				Thread errorReader = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+						try {
+							while (reader.readLine() != null) {
+								// clear error stream buffer
+							}
+						} catch (IOException e) {
+							e.printStackTrace();
+						} finally {
+							try {
+								reader.close();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				});
+				Thread inputReader = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+						try {
+							while (reader.readLine() != null) {
+								// clear input stream buffer
+							}
+						} catch (IOException e) {
+							e.printStackTrace();
+						} finally {
+							try {
+								reader.close();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				});
+				inputReader.start();
+				errorReader.start();
+			}
+
+			for (int i = 0; i < numberOfAgents; i++) {
+				processes.get(i).waitFor();
+			}
+			System.out.println("All processes have terminated.");
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}

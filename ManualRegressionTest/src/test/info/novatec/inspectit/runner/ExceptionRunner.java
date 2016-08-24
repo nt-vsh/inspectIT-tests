@@ -32,7 +32,7 @@ public class ExceptionRunner {
 				throwExceptions.throwMainException();
 			}
 		} catch (CauseException | MainException e) {
-			e.printStackTrace();
+			// do nothing
 		}
 	}
 }
