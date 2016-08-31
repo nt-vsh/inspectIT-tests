@@ -12,8 +12,6 @@ public class ConfigurationKeys {
 	public static final String keyLoggingConfigurationLocation = prefix + "logging.configuration.location";
 	public static final String keyRepositoryLocation = prefix + "repository.location";
 	public static final String keyResultsLocation = prefix + "results.location";
-	public static final String keyDifferentNameForAgents = prefix + "agent.name.different";
-	public static final String keySameNameForAgents = prefix + "agent.name.same";
 
 	public static final String keyNumberOfConcurrentThreads = prefix + "thread.concurrent";
 	public static final String keyThreadExecutionTime = prefix + "thread.time.execution";

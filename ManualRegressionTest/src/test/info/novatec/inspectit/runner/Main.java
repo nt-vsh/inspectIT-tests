@@ -2,14 +2,12 @@ package test.info.novatec.inspectit.runner;
 
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyAgentLocation;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyCauseException;
-import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyDifferentNameForAgents;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyFileNameResults;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyHTTPS;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyLoggingConfigurationLocation;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyNumberOfAgents;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyRepositoryLocation;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyResultsLocation;
-import static test.info.novatec.inspectit.runner.ConfigurationKeys.keySameNameForAgents;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyWeightException;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyWeightHTTP;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.prefix;
@@ -25,10 +23,6 @@ import java.util.Set;
  *
  */
 public class Main {
-
-	private static final String defaultAgentName = "OneAgent";
-	private static boolean allAgentsSameName;
-	private static boolean allAgentsDifferentName;
 
 	private static final int defaultNumberOfAgents = 5;
 	private static int numberOfAgents;
@@ -61,25 +55,15 @@ public class Main {
 		processes = new ArrayList<>();
 		filesResults = new ArrayList<>();
 
-		// if no option is provided the standard method is mixed
-		allAgentsSameName = "true".equals(System.getProperty(keySameNameForAgents));
-		allAgentsDifferentName = "true".equals(System.getProperty(keyDifferentNameForAgents));
-
 		try {
 			for (int i = 0; i < numberOfAgents; i++) {
-				String agentName;
-				if (allAgentsSameName) {
-					agentName = defaultAgentName;
-				} else if (allAgentsDifferentName) {
-					agentName = "Agent" + i;
-				} else {
-					agentName = "Agent" + (int) (10 * Math.random());
-				}
+				String agentName = "Agent" + i;
 				String fileNameResults = resultsLocation + System.currentTimeMillis() + "-" + (int) (1000 * Math.random()) + ".txt";
 				Process process = runAgent(agentName, fileNameResults);
 				processes.add(process);
 				filesResults.add(fileNameResults);
 			}
+			System.out.println("Waiting for processes to terminate.");
 
 			for (int i = 0; i < numberOfAgents; i++) {
 				final Process process = processes.get(i);
@@ -127,6 +111,7 @@ public class Main {
 
 			for (int i = 0; i < numberOfAgents; i++) {
 				processes.get(i).waitFor();
+				System.out.println("Process " + i + " terminated.");
 			}
 			System.out.println("All processes have terminated.");
 		} catch (IOException e) {
@@ -144,7 +129,6 @@ public class Main {
 				properties += " -D" + key + "=" + System.getProperty((String) key);
 			}
 		}
-		System.out.println("properties: " + properties);
 
 		String command = "java -Xbootclasspath/p:" + agentLocation;
 		command += " -javaagent:" + agentLocation;
