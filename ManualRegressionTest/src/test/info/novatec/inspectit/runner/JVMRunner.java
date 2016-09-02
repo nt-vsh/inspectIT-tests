@@ -1,15 +1,15 @@
 package test.info.novatec.inspectit.runner;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import test.info.novatec.inspectit.runner.tools.RunnerTools;
 
 /**
  * @author Valentin Schraub
  *
  */
-public class JVMMain {
+public class JVMRunner {
 	private static int numberOfConcurrentThreads;
 	private static int threadExecutionTime;
 	private static int threadPause;
@@ -59,14 +59,7 @@ public class JVMMain {
 	}
 
 	private static void writeResults() {
-		try {
-			File file = new File(fileNameResults);
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		ArrayList<String> results = new ArrayList<>();
+		RunnerTools.writeToFile(fileNameResults, results);
 	}
 }

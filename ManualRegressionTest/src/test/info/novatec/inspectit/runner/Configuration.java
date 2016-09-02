@@ -38,8 +38,6 @@ public class Configuration {
 	private static final int defaultWeightSQL = 2;
 	private static final int defaultWeightTimers = 7;
 
-	private static final String defaultFileNameResults = "results/results.txt";
-
 
 	private static int weightException;
 	private static int weightHTTP;
@@ -92,7 +90,7 @@ public class Configuration {
 	}
 
 	public static String fileNameResults() {
-		return System.getProperty(keyFileNameResults, defaultFileNameResults);
+		return System.getProperty(keyFileNameResults);
 	}
 
 	// Thread configuration

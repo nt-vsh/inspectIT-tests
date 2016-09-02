@@ -12,9 +12,10 @@ public class LoggingRunner {
 
 	public LoggingRunner() {
 		loggingFeature = new Log4JLoggingFeature();
+		loggingFeature.init();
 	}
 
 	public void run() {
-		loggingFeature.normalLoggingWithAllSeverities();
+		loggingFeature.reducedLogging();
 	}
 }

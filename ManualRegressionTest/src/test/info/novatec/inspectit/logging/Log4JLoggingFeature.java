@@ -8,11 +8,23 @@ import org.testng.annotations.Test;
 
 /**
  * Small test class that executes log4j loggings.
- * 
+ *
  * @author Stefan Siegl
  */
 public class Log4JLoggingFeature {
 
+	private Logger reusedLogger;
+
+	public void init() {
+		reusedLogger = Logger.getLogger(Log4JLoggingFeature.class);
+
+		ConsoleAppender console = new ConsoleAppender();
+		String PATTERN = "%d [%p|%c|%C{1}] %m%n";
+		console.setLayout(new PatternLayout(PATTERN));
+		console.setThreshold(Level.ALL);
+		console.activateOptions();
+		Logger.getRootLogger().addAppender(console);
+	}
 	/**
 	 * Test class to integrate the testee with the testng testing logic.
 	 */
@@ -23,7 +35,7 @@ public class Log4JLoggingFeature {
 
 	/**
 	 * Real Testee method.
-	 * 
+	 *
 	 * Note that this method will start an invocation sequence containing the
 	 * logging features.
 	 */
@@ -43,5 +55,9 @@ public class Log4JLoggingFeature {
 		logger.log(Level.FATAL, "Log4J FATAL message");
 		logger.log(Level.ERROR, "Log4J ERROR message");
 		logger.log(Level.TRACE, "Log4J TRACE message");
+	}
+
+	public void reducedLogging() {
+		reusedLogger.log(Level.FATAL, "Log4J FATAL message");
 	}
 }
