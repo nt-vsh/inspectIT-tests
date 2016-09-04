@@ -27,6 +27,7 @@ public class Main {
 	private static int numberOfAgents;
 	private static ArrayList<Process> processes;
 	private static ArrayList<String> folders;
+	private static Result[] results;
 	private static int destroyedProcesses;
 
 	private static String loggingConfigurationLocation;
@@ -43,6 +44,8 @@ public class Main {
 	private static final String fileNameErrorStream = "errorStream.txt";
 	private static final String fileNameInputStream = "inputStream.txt";
 
+	public static final String startOfResults = "---RESULTS---";
+
 	private static final String connectionToServerFailed = "Connection to the server failed";
 
 	public static void main(String[] args) {
@@ -58,6 +61,7 @@ public class Main {
 
 		processes = new ArrayList<>();
 		folders = new ArrayList<>();
+		results = new Result[numberOfAgents];
 
 		try {
 			for (int i = 0; i < numberOfAgents; i++) {
@@ -103,15 +107,22 @@ public class Main {
 						BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 						ArrayList<String> logs = new ArrayList<>();
 						try {
-							boolean serverConnection = true;
+							boolean serverConnection = true, sendingResults = false;
 							String line;
 							while (serverConnection && ((line = reader.readLine()) != null)) {
 								// clear input stream buffer
 								logs.add(line);
-								if (line.contains(connectionToServerFailed)) {
+								if (sendingResults) {
+									Result result = Result.parse(line);
+									System.out.println(result.getDistributionWithId(index));
+									setResult(index, result);
+									sendingResults = false;
+								} else if (line.contains(connectionToServerFailed)) {
 									serverConnectionFailed(process);
 									serverConnection = false;
 									logs.add("Main: Stopped reading from stream");
+								} else if (line.contains(startOfResults)) {
+									sendingResults = true;
 								}
 							}
 						} catch (IOException e) {
@@ -142,6 +153,19 @@ public class Main {
 			if (destroyedProcesses > 0) {
 				System.out.println(destroyedProcesses + " out of " + numberOfAgents + " processes have been terminated because no connection to the CMR could be established.");
 				System.out.println("Please make sure that the CMR is running.");
+			} else {
+				long averageDuration = 0;
+				for (Result result : results) {
+					averageDuration += result.getDuration();
+				}
+				averageDuration /= numberOfAgents;
+				Result overallResult = new Result(averageDuration, 0, 0, 0, 0, 0);
+				for (Result result : results) {
+					overallResult.aggregate(result);
+				}
+				System.out.println("\n" + numberOfAgents + " agents have been running for an average " + overallResult.getDuration() + "ms");
+				System.out.println("The type distribution of the calls is as follows:");
+				System.out.println(overallResult.getDistribution());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -153,6 +177,10 @@ public class Main {
 	private static void serverConnectionFailed(Process process) {
 		process.destroy();
 		destroyedProcesses++;
+	}
+
+	private static void setResult(int processId, Result result) {
+		results[processId] = result;
 	}
 
 	private static Process runAgent(String agentName, String folderResults) throws IOException {

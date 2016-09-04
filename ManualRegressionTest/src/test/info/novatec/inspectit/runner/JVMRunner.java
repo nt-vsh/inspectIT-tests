@@ -10,26 +10,37 @@ import test.info.novatec.inspectit.runner.tools.RunnerTools;
  *
  */
 public class JVMRunner {
-	private static int numberOfConcurrentThreads;
-	private static int threadExecutionTime;
-	private static int threadPause;
+	private int numberOfConcurrentThreads;
+	private int threadExecutionTime;
+	private int threadPause;
 
-	private static List<Thread> threads;
+	private List<Thread> threads;
 
-	private static String fileNameResults;
+	private long duration;
+	private List<Result> results;
+	private String fileNameResults;
 
 	public static void main(String[] args) {
+		JVMRunner jvmRunner = new JVMRunner();
+		jvmRunner.run();
+	}
+
+	public JVMRunner() {
 		threads = new ArrayList<>();
+		results = new ArrayList<>();
 
 		numberOfConcurrentThreads = Configuration.numberOfConcurrentThreads();
 		threadExecutionTime = Configuration.threadExecutionTime();
 		threadPause = Configuration.threadPause();
 		Configuration.getWeights();
 		fileNameResults = Configuration.fileNameResults();
+	}
 
+	private void run() {
+		long systemTimeStart = System.currentTimeMillis();
 		for (int i = 0; i < numberOfConcurrentThreads; i++) {
 			Thread thread = new Thread() {
-				Runner runner = new Runner();
+				Runner runner = new Runner(JVMRunner.this);
 
 				@Override
 				public void run() {
@@ -55,11 +66,30 @@ public class JVMRunner {
 				e.printStackTrace();
 			}
 		}
+		duration = System.currentTimeMillis() - systemTimeStart;
 		writeResults();
 	}
 
-	private static void writeResults() {
-		ArrayList<String> results = new ArrayList<>();
-		RunnerTools.writeToFile(fileNameResults, results);
+	public void addResult(Result result) {
+		results.add(result);
+	}
+
+	private void writeResults() {
+		ArrayList<String> list = new ArrayList<>();
+		list.add(numberOfConcurrentThreads + " concurrent runners performed " + results.size() + " executions.");
+		Result jvmResult = new Result(duration, 0, 0, 0, 0, 0);
+		for (int i = 0; i < results.size(); i++) {
+			Result result = results.get(i);
+			jvmResult.aggregate(result);
+			list.add(result.getDistributionWithId(i));
+		}
+
+		System.out.println(Main.startOfResults);
+		System.out.println(jvmResult.toString());
+
+		list.add(1, "Total execution time: " + duration + "ms");
+		list.add(2, "The type distribution of the calls is as follows:");
+		list.add(3, jvmResult.getDistribution());
+		RunnerTools.writeToFile(fileNameResults, list);
 	}
 }
