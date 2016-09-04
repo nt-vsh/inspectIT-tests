@@ -30,7 +30,7 @@ public class Configuration {
 	private static final int defaultNumberOfConcurrentThreads = 5;
 	private static final int defaultThreadExecutionTime = 30000;
 	private static final int defaultThreadPause = 50;
-	private static final int defaultNumberOfFirstLevelChildren = 100;
+	private static final int defaultNumberOfFirstLevelChildren = 50;
 
 	private static final int defaultWeightException = 15;
 	private static final int defaultWeightHTTP = 20;
