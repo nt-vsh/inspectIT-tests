@@ -27,6 +27,7 @@ public class Main {
 	private static int numberOfAgents;
 	private static ArrayList<Process> processes;
 	private static ArrayList<String> folders;
+	private static int destroyedProcesses;
 
 	private static String loggingConfigurationLocation;
 	private static String repositoryLocation;
@@ -41,6 +42,8 @@ public class Main {
 	private static final String fileNameResults = "results.txt";
 	private static final String fileNameErrorStream = "errorStream.txt";
 	private static final String fileNameInputStream = "inputStream.txt";
+
+	private static final String connectionToServerFailed = "Connection to the server failed";
 
 	public static void main(String[] args) {
 		try {
@@ -65,7 +68,7 @@ public class Main {
 				processes.add(process);
 				folders.add(folder);
 			}
-			System.out.println("Waiting for processes to terminate.");
+			System.out.println("Waiting for processes to terminate.\n");
 
 			for (int i = 0; i < numberOfAgents; i++) {
 				final int index = i;
@@ -76,8 +79,9 @@ public class Main {
 						BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 						ArrayList<String> logs = new ArrayList<>();
 						try {
+							boolean serverConnection = true;
 							String line;
-							while ((line = reader.readLine()) != null) {
+							while (serverConnection && ((line = reader.readLine()) != null)) {
 								// clear error stream buffer
 								logs.add(line);
 							}
@@ -99,10 +103,16 @@ public class Main {
 						BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 						ArrayList<String> logs = new ArrayList<>();
 						try {
+							boolean serverConnection = true;
 							String line;
-							while ((line = reader.readLine()) != null) {
+							while (serverConnection && ((line = reader.readLine()) != null)) {
 								// clear input stream buffer
 								logs.add(line);
+								if (line.contains(connectionToServerFailed)) {
+									serverConnectionFailed(process);
+									serverConnection = false;
+									logs.add("Main: Stopped reading from stream");
+								}
 							}
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -128,12 +138,21 @@ public class Main {
 					System.out.println("Process " + i + " terminated successfully.");
 				}
 			}
-			System.out.println("All processes have terminated.");
+			System.out.println("\nAll processes have terminated.");
+			if (destroyedProcesses > 0) {
+				System.out.println(destroyedProcesses + " out of " + numberOfAgents + " processes have been terminated because no connection to the CMR could be established.");
+				System.out.println("Please make sure that the CMR is running.");
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static void serverConnectionFailed(Process process) {
+		process.destroy();
+		destroyedProcesses++;
 	}
 
 	private static Process runAgent(String agentName, String folderResults) throws IOException {
