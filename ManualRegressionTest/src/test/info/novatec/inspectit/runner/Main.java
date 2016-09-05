@@ -114,7 +114,6 @@ public class Main {
 								logs.add(line);
 								if (sendingResults) {
 									Result result = Result.parse(line);
-									System.out.println(result.getDistributionWithId(index));
 									setResult(index, result);
 									sendingResults = false;
 								} else if (line.contains(connectionToServerFailed)) {
@@ -151,8 +150,8 @@ public class Main {
 			}
 			System.out.println("\nAll processes have terminated.");
 			if (destroyedProcesses > 0) {
-				System.out.println(destroyedProcesses + " out of " + numberOfAgents + " processes have been terminated because no connection to the CMR could be established.");
-				System.out.println("Please make sure that the CMR is running.");
+				System.err.println(destroyedProcesses + " out of " + numberOfAgents + " processes have been terminated because no connection to the CMR could be established.");
+				System.err.println("Please make sure that the CMR is running.");
 			} else {
 				long averageDuration = 0;
 				for (Result result : results) {
