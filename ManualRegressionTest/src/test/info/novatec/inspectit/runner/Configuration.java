@@ -9,7 +9,6 @@ import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyNumberOfCo
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyNumberOfFirstLevelChildren;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyPassExceptions;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyPreparedStatement;
-import static test.info.novatec.inspectit.runner.ConfigurationKeys.keySimpleInvocationSequence;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyThreadExecutionTime;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyThreadPause;
 import static test.info.novatec.inspectit.runner.ConfigurationKeys.keyTimerCharting;
@@ -167,11 +166,6 @@ public class Configuration {
 
 	public static boolean https() {
 		return "true".equals(System.getProperty(keyHTTPS));
-	}
-
-	// Invocation sequence
-	public static boolean simple() {
-		return "true".equals(System.getProperty(keySimpleInvocationSequence));
 	}
 
 	// SQL

@@ -31,8 +31,6 @@ public class ConfigurationKeys {
 	public static final String keyHTTPGet = prefix + "http.get";
 	public static final String keyHTTPS = prefix + "http.https";
 
-	public static final String keySimpleInvocationSequence = prefix + "isequence.simple";
-
 	public static final String keyBindParameters = prefix + "sql.bindParameters";
 	public static final String keyPreparedStatement = prefix + "sql.preparedStmt";
 
