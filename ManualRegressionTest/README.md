@@ -22,28 +22,34 @@ In order to run the jar with a specific configuration include the options in the
 The following options can be set via the command line:
 
 ## General settings
-it.agent.number						The number of JVMs to start
-it.agent.location					The location of the inspectIT
-it.logging.configuration.location	The location of a logging configuration
-it.repository.location				The location of the CMR
-it.results.location					The location where to write results
+| Key                               | Description                             |
+| :-------------------------------: | :-------------------------------------- |
+| it.agent.number                   | The number of JVMs to start             |
+| it.agent.location                 | The location of the inspectIT           |
+| it.logging.configuration.location | The location of a logging configuration |
+| it.repository.location            | The location of the CMR                 |
+| it.results.location               | The location where to write results     |
 
 ## JVMRunner settings
-it.thread.concurrent		Number of threads running concurrently
-it.thread.time.execution	Execution time of a thread
-it.thread.time.pause		Pause between executions
+| Key                      | Description                            |
+| :----------------------: | :------------------------------------- |
+| it.thread.concurrent     | Number of threads running concurrently |
+| it.thread.time.execution | Execution time of a thread             |
+| it.thread.time.pause     | Pause between executions               |
 
 ## Runner settings
-it.runner.children		Total amount of calls per execution
-it.weight.exception		Relative amount of exception calls
-it.weight.http			Relative amount of HTTP calls
-it.weight.logging		Relative amount of logging calls
-it.weight.sql			Relative amount of SQL calls
-it.weight.timer			Relative amount of timer calls
-it.exception.cause		Throw an exception with a cause
-it.exception.pass		Call a method that catches and passes exceptions
-it.http.get				Make an HTTP get request
-it.http.https			Make an HTTPS request
-it.sql.bindParameters	Execute an SQL statement with bound parameters
-it.sql.preparedStmt		Execute a prepared SQL statement.
-it.timer.charting		Use a timer with charting
+| Key                   | Description                                      |
+| :-------------------: | :----------------------------------------------- |
+| it.runner.children    | Total amount of calls per execution              |
+| it.weight.exception   | Relative amount of exception calls               |
+| it.weight.http        | Relative amount of HTTP calls                    |
+| it.weight.logging     | Relative amount of logging calls                 |
+| it.weight.sql         | Relative amount of SQL calls                     |
+| it.weight.timer       | Relative amount of timer calls                   |
+| it.exception.cause    | Throw an exception with a cause                  |
+| it.exception.pass     | Call a method that catches and passes exceptions |
+| it.http.get           | Make an HTTP get request                         |
+| it.http.https         | Make an HTTPS request                            |
+| it.sql.bindParameters | Execute an SQL statement with bound parameters   |
+| it.sql.preparedStmt   | Execute a prepared SQL statement.                |
+| it.timer.charting     | Use a timer with charting                        |

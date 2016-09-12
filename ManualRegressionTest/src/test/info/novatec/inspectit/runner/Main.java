@@ -37,7 +37,7 @@ public class Main {
 
 	private static final String defaultAgentLocation = "inspectit-agent.jar";
 	private static final String defaultJARLocation = "runners.jar";
-	private static final String defaultLoggingConfigurationLocation = "logging-config.xml";
+	private static final String defaultLoggingConfigurationLocation = "";
 	private static final String defaultRepositoryLocation = "localhost:9070";
 	private static final String defaultResultsLocation = "results/";
 	private static final String fileNameResults = "results.txt";
@@ -195,7 +195,9 @@ public class Main {
 		command += " -javaagent:" + agentLocation;
 		command += " -Dinspectit.repository=" + repositoryLocation;
 		command += " -Dinspectit.agent.name=" + agentName;
-		command += " -Dinspectit.logging.config=" + loggingConfigurationLocation;
+		if (!loggingConfigurationLocation.isEmpty()) {
+			command += " -Dinspectit.logging.config=" + loggingConfigurationLocation;
+		}
 		command += properties;
 		command += " -D" + keyFileNameResults + "=" + folderResults + fileNameResults;
 		command += " -jar " + defaultJARLocation;
